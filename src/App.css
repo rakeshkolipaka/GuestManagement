@@ -1,0 +1,165 @@
+
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  background-color: #f3f3f3;
+  margin: 0px;
+  padding: 0px;
+}
+.attendeesTabel {
+  background: #fff;
+  padding: 20px 10px;
+  font-size: 18px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #e2e2e2;
+}
+
+.attendeesFilter {
+  background: #fff;
+  padding: 20px 10px;
+  font-size: 18px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #e2e2e2;
+}
+
+.attendeeGrid {
+  max-width: 50%;
+  margin: 80px auto 0px auto;
+  padding: 15px 10px 10px;
+}
+
+@media screen and (max-width: 950px) {
+  .attendeeGrid{
+      max-width: 100%;
+      margin: 80px 0px;
+  }
+  .header img{
+    margin-left: 20px !important;
+  }
+  .headerText{
+    margin-right: 20px !important;
+  }
+  .attendeesTabel{
+    width: 50%;
+  }
+}
+
+.attendeeList {
+  height: 600px;
+  overflow-x: hidden;
+}
+.attendeeList::-webkit-scrollbar {
+  display: none;
+}
+
+button {
+  padding: 10px;
+  border-radius: 4px;
+  margin-left: 10px;
+  font-size: 15px;
+  background: cadetblue;
+  color: white;
+  width: 150px;
+}
+
+button svg{
+  vertical-align: text-bottom;
+}
+
+.seatAvailability button svg{
+  vertical-align: text-top;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 78px;
+  background-color: #282b33;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.header img{
+  margin-left: 220px;
+}
+
+.headerText{
+  float: right;
+  margin-top: 25px;
+  margin-right: 100px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.title{
+  color: #9693e6;
+  font-size: 3rem;
+  font-weight: 700;
+  width: 49%;
+  display: inline-block;
+  padding-left: 5px;
+}
+
+.numOfSeats{
+  color: #9693e6;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.seatAvailability{
+  width: 49%;
+  display: inline-block;
+  text-align: right;
+}
+
+.input{
+  border-radius: 5px;
+  border: 1px solid gray;
+  font-size: 18px;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #337ab7; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #337ab7; 
+}
