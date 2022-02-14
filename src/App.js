@@ -16,10 +16,13 @@ function App() {
   const [sendPdfModalIsOpen,setSendPdfModalIsOpen] = useState(false);
   const [guestDetailsToSendPdf,setGuestDetailsToSendPdf] = useState({});
   const [searched, setSearched] = useState("");
+
 	useEffect(() => {
 		getUpdatedList();
 	}, []);
-  const currentStatus = index => {
+
+  // Change guest status
+  const changeStatus = index => {
     const changeStatusArticle ={
       "name": attendees[index].name,
       "isEntered": true,
@@ -40,9 +43,7 @@ function App() {
     setSendPdfModalIsOpenToFalse();
 	};
 
-  const filterList = value => {
-	};
-
+  //Get updated guest list
   const getUpdatedList =() =>{
     axios.get('https://61a304a7014e1900176dea86.mockapi.io/Attendees')
 			.then(response => {
@@ -70,6 +71,8 @@ function App() {
     });
     
 	};
+
+  //Modal control starts
   const closeAddGuestPopup = () => {
     setAddGuestModalIsOpenToFalse();
 	};
@@ -95,6 +98,19 @@ function App() {
     setSendPdfModalIsOpen(false)
   }
 
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
+  //Modal control ends
+
+  //Filter guest gist starts
   const currentSearch = (searchInput) =>{
     const filteredData = attendees.filter((row) => { 
       return row.name.toLowerCase().includes(searchInput.toLowerCase()) 
@@ -106,19 +122,9 @@ function App() {
     setSearched("");
     getUpdatedList();
   }
+  //Filter guest gist ends
 
   let numOfSeatsLeft = 50-attendees.length;
-
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-    },
-  };
 
   return (
     <div className="App">
@@ -139,14 +145,10 @@ function App() {
               value={searched}
               onChange={(searchInput)=>currentSearch(searchInput)}
               onCancelSearch={() => cancelSearch()}
-              style={{
-                margin: '0 auto',
-                maxWidth: 800
-              }}
             />
           </div>
           <div className="seatAvailability">
-            <button style={{backgroundColor:"#337ab7"}} onClick={()=>setAddGuestModalIsOpenToTrue()}><BsPersonPlusFill/>  Add User</button>
+            <button style={{backgroundColor:"#337ab7"}} onClick={()=>setAddGuestModalIsOpenToTrue()}><BsPersonPlusFill/>  Add Guest</button>
             
           </div>
         </div>
@@ -156,7 +158,7 @@ function App() {
                             key={index}
                             index={index}
                             attendee={attendee}
-                            currentStatus={currentStatus}
+                            changeStatus={changeStatus}
                             setSendPdfModalIsOpenToTrue={setSendPdfModalIsOpenToTrue}
                         />
                     ))}
