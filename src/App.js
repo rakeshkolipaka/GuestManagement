@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Header from './components/Header';
-import SearchBar from './components/SearchBar';
+import SearchBar from 'material-ui-search-bar';
 import AttendeesTabel from './components/AttendeesTabel';
 import AddGuest from './components/AddGuest';
+import SendPdf from './components/SendPdf';
 import './App.css';
 import axios from 'axios';
 import logo from './conferenceLogo.png';
@@ -11,59 +12,99 @@ import Modal from 'react-modal';
 
 function App() {
   const [attendees, setAttendees] = useState([]);
-	const [logoInfo, setLogoInfo] = useState([]);
-	const [user, setUser] = useState('');
+  const [addGuestModalIsOpen,setAddGuestModalIsOpen] = useState(false);
+  const [sendPdfModalIsOpen,setSendPdfModalIsOpen] = useState(false);
+  const [guestDetailsToSendPdf,setGuestDetailsToSendPdf] = useState({});
+  const [searched, setSearched] = useState("");
 	useEffect(() => {
-		axios.get('https://61a304a7014e1900176dea86.mockapi.io/Attendees')
-			.then(response => setAttendees(response.data));
+		getUpdatedList();
 	}, []);
   const currentStatus = index => {
+    const changeStatusArticle ={
+      "name": attendees[index].name,
+      "isEntered": true,
+      "profession": attendees[index].profession,
+      "email": attendees[index].email,
+      "id": attendees[index].id
+    };
+    axios.put('https://61a304a7014e1900176dea86.mockapi.io/Attendees/'+attendees[index].id, changeStatusArticle)
+      .then(response => {
+        getUpdatedList();
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+    });
 	};
 
-  const sendPdf = index => {
+  const sendPdf = email => {
+    setSendPdfModalIsOpenToFalse();
 	};
 
   const filterList = value => {
 	};
 
-  const AddNewGuest = (name, email) => {
+  const getUpdatedList =() =>{
+    axios.get('https://61a304a7014e1900176dea86.mockapi.io/Attendees')
+			.then(response => {
+        const sorted = response.data.sort((a, b) => a.isEntered - b.isEntered);
+        setAttendees(sorted);
+        
+        });
+  };
+
+  const addNewGuest = (name, email, profession) => {
     const article ={
       "name": name,
       "isEntered": true,
-      "profession": "Health Care",
-      "email": email
-    }
-    useEffect(() => {
-      axios.post('https://61a304a7014e1900176dea86.mockapi.io/Attendees', {
-        "name": name,
-        "isEntered": true,
-        "profession": "Health Care",
-        "email": email,
-        "id": attendees.length+1
+      "profession": profession,
+      "email": email,
+      "id": attendees.length+1
+    };
+    axios.post('https://61a304a7014e1900176dea86.mockapi.io/Attendees', article)
+      .then(response => {
+        getUpdatedList();
+        setAddGuestModalIsOpenToFalse();
       })
-        .then(response => {
-          console.log(response);
-          //setModalIsOpenToFalse();
-        })
-        .catch(error => {
-          console.error('There was an error!', error);
-      });
-        
-    }, []);
+      .catch(error => {
+        console.error('There was an error!', error);
+    });
     
 	};
-  const closePopup = () => {
-    setModalIsOpenToFalse();
+  const closeAddGuestPopup = () => {
+    setAddGuestModalIsOpenToFalse();
 	};
 
-  const [modalIsOpen,setModalIsOpen] = useState(false);
-
-  const setModalIsOpenToTrue =()=>{
-      setModalIsOpen(true)
+  const setAddGuestModalIsOpenToTrue =()=>{
+    setAddGuestModalIsOpen(true)
   }
 
-  const setModalIsOpenToFalse =()=>{
-      setModalIsOpen(false)
+  const setAddGuestModalIsOpenToFalse =()=>{
+    setAddGuestModalIsOpen(false)
+  }
+
+  const closeSendPdfPopup = () => {
+    setSendPdfModalIsOpenToFalse();
+	};
+
+  const setSendPdfModalIsOpenToTrue = index =>{
+    setGuestDetailsToSendPdf(attendees[index]);
+    setSendPdfModalIsOpen(true)
+  }
+
+  const setSendPdfModalIsOpenToFalse =()=>{
+    setSendPdfModalIsOpen(false)
+  }
+
+  const currentSearch = (searchInput) =>{
+    const filteredData = attendees.filter((row) => { 
+      return row.name.toLowerCase().includes(searchInput.toLowerCase()) 
+    });
+    setAttendees(filteredData);
+  }
+
+  const cancelSearch = ()=>{
+    setSearched("");
+    getUpdatedList();
   }
 
   let numOfSeatsLeft = 50-attendees.length;
@@ -90,20 +131,23 @@ function App() {
           Attendees
         </div>
         <div className="seatAvailability">
-          Seats left: <span className="numOfSeats" dangerouslySetInnerHTML={ { __html: numOfSeatsLeft} }></span>
+          Seats left: <span className="numOfSeats" style={{color: numOfSeatsLeft<20? "red":"#9693e6" }}>{numOfSeatsLeft}</span>
         </div>
         <div className="attendeesFilter">
-          <div style={{width: "49%"}}>
-            <SearchBar className="searchBar" filterList={filterList}></SearchBar>
+          <div>
+            <SearchBar
+              value={searched}
+              onChange={(searchInput)=>currentSearch(searchInput)}
+              onCancelSearch={() => cancelSearch()}
+              style={{
+                margin: '0 auto',
+                maxWidth: 800
+              }}
+            />
           </div>
           <div className="seatAvailability">
-            <button style={{backgroundColor:"#337ab7"}} onClick={()=>setModalIsOpenToTrue()}><BsPersonPlusFill/>  Add User</button>
-            <Modal isOpen={modalIsOpen} style={customStyles}>
-                <AddGuest 
-                  AddNewGuest={AddNewGuest}
-                  closePopup={closePopup}
-                />
-            </Modal>
+            <button style={{backgroundColor:"#337ab7"}} onClick={()=>setAddGuestModalIsOpenToTrue()}><BsPersonPlusFill/>  Add User</button>
+            
           </div>
         </div>
         <div className="attendeeList">
@@ -113,12 +157,24 @@ function App() {
                             index={index}
                             attendee={attendee}
                             currentStatus={currentStatus}
-                            sendPdf={sendPdf}
+                            setSendPdfModalIsOpenToTrue={setSendPdfModalIsOpenToTrue}
                         />
                     ))}
 				</div>
       </div>
-      
+      <Modal isOpen={addGuestModalIsOpen} style={customStyles}>
+          <AddGuest 
+            addNewGuest={addNewGuest}
+            closeAddGuestPopup={closeAddGuestPopup}
+          />
+      </Modal>
+      <Modal isOpen={sendPdfModalIsOpen} style={customStyles}>
+          <SendPdf 
+            guestDetailsToSendPdf={guestDetailsToSendPdf}
+            sendPdf={sendPdf}
+            closeSendPdfPopup={closeSendPdfPopup}
+          />
+      </Modal>
     </div>
   );
 }

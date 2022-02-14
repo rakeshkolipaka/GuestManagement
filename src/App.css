@@ -58,9 +58,6 @@ body {
   .headerText{
     margin-right: 20px !important;
   }
-  .attendeesTabel{
-    width: 50%;
-  }
 }
 
 .attendeeList {
@@ -79,6 +76,13 @@ button {
   background: cadetblue;
   color: white;
   width: 150px;
+}
+
+.modalButton{
+  border-radius: 4px;
+  font-size: 12px;
+  background: #337ab7;
+  width: 100px;
 }
 
 button svg{
@@ -121,7 +125,6 @@ button svg{
 }
 
 .numOfSeats{
-  color: #9693e6;
   font-size: 3rem;
   font-weight: 700;
 }
@@ -136,6 +139,10 @@ button svg{
   border-radius: 5px;
   border: 1px solid gray;
   font-size: 18px;
+}
+
+form{
+  width: 500px;
 }
 
 .App-link {

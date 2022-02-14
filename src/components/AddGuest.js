@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 
-function AddGuest({ AddNewGuest, closePopup }) {
+function AddGuest({ addNewGuest, closeAddGuestPopup }) {
 	const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-	const addUser = () => {
+    const [profession, setProfession] = useState("");
+	const addUser = e => {
 		
-		//e.preventDefault();
+		e.preventDefault();
 		if (!name) return;
         if (!email) return;
-        AddNewGuest(name, email);
+        if (!profession) return;
+        addNewGuest(name, email, profession);
 	};
 	
 	return (
-		<form>
+		<form onSubmit={addUser} noValidate>
+            <h2 style={{marginTop: "0px", borderBottom: "2px solid #337ab7"}}>Add Guest</h2>
 			<div style={{width:"100%", textAlign: "center", marginBottom: "10px"}}>
                 <input
                     type="text"
@@ -29,9 +32,17 @@ function AddGuest({ AddNewGuest, closePopup }) {
                     placeholder="Email"
                 />
             </div>
-            <div style={{width:"100%", textAlign: "center", marginBottom: "10px"}}>
-                <button onClick={() => addUser()}>Submit</button>
-                <button onClick={() => closePopup()}>Close</button>
+            <div style={{width:"100%", textAlign: "center", marginBottom: "20px"}}>
+                <input
+                    type="text"
+                    className="input"
+                    onChange={e => setProfession(e.target.value)}
+                    placeholder="Profession"
+                />
+            </div>
+            <div style={{width:"100%", textAlign: "center"}}>
+                <button type="submit" className="modalButton">Submit</button>
+                <button onClick={() => closeAddGuestPopup()} className="modalButton">Close</button>
             </div>
 		</form>
 	);
