@@ -4,17 +4,22 @@ function SendPdf({ guestDetailsToSendPdf, sendPdf, closeSendPdfPopup }) {
 	const [email, setEmail] = useState("");
 	const sendEmail = e => {
 		e.preventDefault();
-        if (!email) sendPdf(guestDetailsToSendPdf.email);
-        sendPdf(email);
+        if (!email) {
+            sendPdf(e);
+        }
+        else{
+            sendPdf(e);
+        }
 	};
 	
 	return (
 		<form onSubmit={sendEmail} noValidate>
-            <h2 style={{marginTop: "0px", borderBottom: "2px solid #337ab7"}}>Resend PDF</h2>
+            <h2 style={{marginTop: "0px", borderBottom: "2px solid #337ab7"}}>Send PDF</h2>
             <div style={{width:"100%", textAlign: "center", marginBottom: "10px"}}>
                 <input
                     type="text"
                     className="input"
+                    name="name"
                     value={guestDetailsToSendPdf.name}
                     placeholder="Name"
                 />
@@ -23,6 +28,7 @@ function SendPdf({ guestDetailsToSendPdf, sendPdf, closeSendPdfPopup }) {
                 <input
                     type="text"
                     className="input"
+                    name="profession"
                     value={guestDetailsToSendPdf.profession}
                     placeholder="Profession"
                 />
@@ -31,6 +37,7 @@ function SendPdf({ guestDetailsToSendPdf, sendPdf, closeSendPdfPopup }) {
                 <input
                     type="email"
                     className="input"
+                    name="email"
                     defaultValue={guestDetailsToSendPdf.email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="Email"

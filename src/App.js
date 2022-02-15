@@ -9,9 +9,11 @@ import axios from 'axios';
 import logo from './conferenceLogo.png';
 import { BsPersonPlusFill } from "react-icons/bs";
 import Modal from 'react-modal';
+import emailjs from 'emailjs-com';
 
 function App() {
   const [attendees, setAttendees] = useState([]);
+  const [initialAttendeesList, setInitialAttendeesList] = useState([]);
   const [addGuestModalIsOpen,setAddGuestModalIsOpen] = useState(false);
   const [sendPdfModalIsOpen,setSendPdfModalIsOpen] = useState(false);
   const [guestDetailsToSendPdf,setGuestDetailsToSendPdf] = useState({});
@@ -23,6 +25,8 @@ function App() {
 
   // Change guest status
   const changeStatus = index => {
+    setSendPdfModalIsOpenToTrue(index);
+    
     const changeStatusArticle ={
       "name": attendees[index].name,
       "isEntered": true,
@@ -39,9 +43,20 @@ function App() {
     });
 	};
 
-  const sendPdf = email => {
+  const sendPdf = e => {
+    emailPdf(e);
     setSendPdfModalIsOpenToFalse();
 	};
+
+  //Email PDF
+  const emailPdf = e =>{
+    emailjs.sendForm('service_4rabwcv', 'template_cqieo8o', e.target, 'user_sopx2lhIME8hAh3ipiNbO')
+    .then((result) => {
+        console.log(result.text);
+    }, (error) => {
+        console.log(error.text);
+    });
+  }
 
   //Get updated guest list
   const getUpdatedList =() =>{
@@ -49,17 +64,18 @@ function App() {
 			.then(response => {
         const sorted = response.data.sort((a, b) => a.isEntered - b.isEntered);
         setAttendees(sorted);
-        
+        setInitialAttendeesList(sorted);
         });
   };
 
-  const addNewGuest = (name, email, profession) => {
+  const addNewGuest = (name, email, profession, e) => {
+    emailPdf(e);
     const article ={
       "name": name,
       "isEntered": true,
       "profession": profession,
       "email": email,
-      "id": attendees.length+1
+      "id": initialAttendeesList.length+1
     };
     axios.post('https://61a304a7014e1900176dea86.mockapi.io/Attendees', article)
       .then(response => {
@@ -112,7 +128,7 @@ function App() {
 
   //Filter guest gist starts
   const currentSearch = (searchInput) =>{
-    const filteredData = attendees.filter((row) => { 
+    const filteredData = initialAttendeesList.filter((row) => { 
       return row.name.toLowerCase().includes(searchInput.toLowerCase()) 
     });
     setAttendees(filteredData);
@@ -124,7 +140,7 @@ function App() {
   }
   //Filter guest gist ends
 
-  let numOfSeatsLeft = 50-attendees.length;
+  let numOfSeatsLeft = 50-initialAttendeesList.length;
 
   return (
     <div className="App">
@@ -133,11 +149,11 @@ function App() {
 				logo={logo}
 			/>
       <div className="attendeeGrid">
-        <div className="title">
+        <div className="tableTitle">
           Attendees
         </div>
         <div className="seatAvailability">
-          Seats left: <span className="numOfSeats" style={{color: numOfSeatsLeft<20? "red":"#9693e6" }}>{numOfSeatsLeft}</span>
+          Seats left: <span className="numOfSeats" style={{color: numOfSeatsLeft<20? "red":"#232083" }}>{numOfSeatsLeft}</span>
         </div>
         <div className="attendeesFilter">
           <div>

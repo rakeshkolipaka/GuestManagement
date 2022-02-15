@@ -6,14 +6,14 @@ function AttendeesTabel({ attendee, index, changeStatus, setSendPdfModalIsOpenTo
 	return (
 		<div
 			className="attendeesTabel"
-			style={{borderLeft: attendee.isEntered? "10px solid #6c757d" : "10px solid #28a745"}}
+			style={{borderLeft: attendee.isEntered? "10px solid #6c757d" : "10px solid #218739"}}
 		>
 			{attendee.name}
 			
 
 			<div>
-				<button style={{display: attendee.isEntered? "none": "block", backgroundColor: "#28a745"}} onClick={() => changeStatus(index)}><BsCheck2/>  Here</button>
-				<button style={{display: attendee.isEntered? "block": "none", backgroundColor: "#6c757d"}} onClick={() => setSendPdfModalIsOpenToTrue(index)}><BsChatSquareText/>  Resend PDF</button>
+				<button style={{display: attendee.isEntered? "none": "block", backgroundColor: "#218739"}} onClick={() => changeStatus(index)}><BsCheck2/>  Here</button>
+				<button style={{display: attendee.isEntered? "block": "none", backgroundColor: "#6c757d"}} onClick={() => setSendPdfModalIsOpenToTrue(index)}><BsChatSquareText/>  Send PDF</button>
 			</div>
 		</div>
 	);

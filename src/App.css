@@ -97,13 +97,13 @@ button svg{
 .headerText{
   float: right;
   margin-top: 25px;
-  margin-right: 100px;
+  margin-right: 150px;
   font-size: 20px;
   font-weight: 700;
 }
 
-.title{
-  color: #9693e6;
+.tableTitle{
+  color: #232083;
   font-size: 3rem;
   font-weight: 700;
   width: 49%;

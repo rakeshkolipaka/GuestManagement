@@ -10,7 +10,7 @@ function AddGuest({ addNewGuest, closeAddGuestPopup }) {
 		if (!name) return;
         if (!email) return;
         if (!profession) return;
-        addNewGuest(name, email, profession);
+        addNewGuest(name, email, profession, e);
 	};
 	
 	return (
@@ -20,6 +20,7 @@ function AddGuest({ addNewGuest, closeAddGuestPopup }) {
                 <input
                     type="text"
                     className="input"
+                    name="name"
                     onChange={e => setName(e.target.value)}
                     placeholder="Name"
                 />
@@ -28,6 +29,7 @@ function AddGuest({ addNewGuest, closeAddGuestPopup }) {
                 <input
                     type="email"
                     className="input"
+                    name="email"
                     onChange={e => setEmail(e.target.value)}
                     placeholder="Email"
                 />
@@ -36,6 +38,7 @@ function AddGuest({ addNewGuest, closeAddGuestPopup }) {
                 <input
                     type="text"
                     className="input"
+                    name="profession"
                     onChange={e => setProfession(e.target.value)}
                     placeholder="Profession"
                 />
