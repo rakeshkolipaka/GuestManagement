@@ -26,7 +26,7 @@ function App() {
   // Change guest status
   const changeStatus = index => {
     setSendPdfModalIsOpenToTrue(index);
-    
+
     const changeStatusArticle ={
       "name": attendees[index].name,
       "isEntered": true,
@@ -153,7 +153,7 @@ function App() {
           Attendees
         </div>
         <div className="seatAvailability">
-          Seats left: <span className="numOfSeats" style={{color: numOfSeatsLeft<20? "red":"#232083" }}>{numOfSeatsLeft}</span>
+          Seats left: <span className="numOfSeats" style={{color: numOfSeatsLeft<20? "red":"#681fc3" }}>{numOfSeatsLeft}</span>
         </div>
         <div className="attendeesFilter">
           <div>
